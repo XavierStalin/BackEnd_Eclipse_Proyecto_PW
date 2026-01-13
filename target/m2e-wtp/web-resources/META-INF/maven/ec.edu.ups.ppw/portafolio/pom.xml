@@ -208,6 +208,11 @@
             <artifactId>arquillian-junit5-container</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+		    <groupId>jakarta.json.bind</groupId>
+		    <artifactId>jakarta.json.bind-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>
 
     </dependencies>
 

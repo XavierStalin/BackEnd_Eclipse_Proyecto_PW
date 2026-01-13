@@ -12,7 +12,7 @@ public class GestionToken {
     @Inject
     private TokenDAO daoToken;
 
-    // VALIDAR: Sirve para los filtros de seguridad (verificar si el token es real)
+    // VALIDAR
     public boolean esTokenValido(String tokenStr) {
         Token t = daoToken.getPorTokenString(tokenStr);
         if (t == null) return false;
@@ -20,18 +20,18 @@ public class GestionToken {
         return true;
     }
     
-    // GUARDAR: Se llama AL MOMENTO DEL LOGIN
+    // GUARDAR
     public void crearToken(Usuario usuario, String tokenStr) {
         Token t = new Token();
         t.setUsuario(usuario);
         t.setToken(tokenStr);
         t.setRevoked(false);
         t.setExpired(false);
-        // Aquí podrías setear expiración calculada, etc.
+        //---------------
         daoToken.insert(t);
     }
     
-    // REVOCAR: Se llama AL MOMENTO DEL LOGOUT
+    // REVOCAR
     public void revocarToken(String tokenStr) {
         Token t = daoToken.getPorTokenString(tokenStr);
         if(t != null) {

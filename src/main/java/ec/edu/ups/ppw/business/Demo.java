@@ -119,12 +119,7 @@ public class Demo {
         // ==========================================
         // 7. TOKEN (Simulacro de Login)
         // ==========================================
-        Token token = new Token();
-        token.setUsuario(programador);
-        token.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."); // Token falso
-        token.setExpired(false);
-        token.setRevoked(false);
-        daoToken.insert(token);
+        
 
         // ==========================================
         // VERIFICACIÓN EN CONSOLA

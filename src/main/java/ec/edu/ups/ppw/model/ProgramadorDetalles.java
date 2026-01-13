@@ -1,5 +1,5 @@
 package ec.edu.ups.ppw.model;
-
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +13,7 @@ public class ProgramadorDetalles {
     @OneToOne
     @MapsId // Esto hace que comparta la MISMA ID que Usuario (Clave Primaria Compartida)
     @JoinColumn(name = "det_programador_id")
+    @JsonbTransient
     private Usuario usuario;
 
     @Column(name = "det_especialidad", length = 50)
