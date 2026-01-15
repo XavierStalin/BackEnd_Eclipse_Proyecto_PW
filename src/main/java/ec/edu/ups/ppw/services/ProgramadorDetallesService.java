@@ -26,7 +26,6 @@ public class ProgramadorDetallesService {
         return Response.ok(list).build();
     }
 
-    // LEER UNO (Por Cédula)
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,8 +54,8 @@ public class ProgramadorDetallesService {
         try {
             gpd.createProgramadorDetalles(pd);
             
-            // Construye la URL usando el ID (Cédula)
-            // Asegúrate que pd.getId() devuelva la cédula (String)
+            // Construye la URL usando el ID
+            
             URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(pd.getId())).build();
             
             return Response.created(location).entity(pd).build();
@@ -75,8 +74,6 @@ public class ProgramadorDetallesService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarProgramadorDetalles(@PathParam("id") String id, ProgramadorDetalles pd) {
         try {
-            // Seguridad: Validar que el ID de la URL coincida con el ID del cuerpo
-            // Asumiendo que pd.getId() devuelve String
             if (!id.equals(String.valueOf(pd.getId()))) {
                 Error error = new Error(400, "Bad Request", "El ID de la URL no coincide con el ID del cuerpo");
                 return Response.status(Response.Status.BAD_REQUEST).entity(error).build();

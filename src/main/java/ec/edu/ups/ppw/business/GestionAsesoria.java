@@ -24,7 +24,7 @@ public class GestionAsesoria {
     }
 
     public void createAsesoria(Asesoria asesoria) throws Exception {
-        // Aquí podrías validar reglas de negocio, por ejemplo:
+        
         if (asesoria.getCliente() == null || asesoria.getProgramador() == null) {
             throw new Exception("La asesoría debe tener un cliente y un programador asignados.");
         }
@@ -32,12 +32,12 @@ public class GestionAsesoria {
     }
 
     public void updateAsesoria(Asesoria asesoria) throws Exception {
-        // Validamos que la asesoría traiga un ID válido
+       
         if (asesoria.getId() == 0) {
             throw new Exception("Se requiere un ID para actualizar.");
         }
         
-        // Verificamos existencia antes de actualizar
+      
         if (daoAsesoria.read(asesoria.getId()) == null) {
             throw new Exception("La asesoría con ID " + asesoria.getId() + " no existe.");
         }

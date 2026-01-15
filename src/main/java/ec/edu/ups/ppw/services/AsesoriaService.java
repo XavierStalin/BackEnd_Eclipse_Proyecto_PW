@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-@Path("asesorias") // Plural es el estándar, pero puedes dejar "asesoria" si prefieres
+@Path("asesorias") 
 public class AsesoriaService {
 
     @Inject
@@ -74,7 +74,7 @@ public class AsesoriaService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response actualizarAsesoria(@PathParam("id") int id, Asesoria asesoria) {
         try {
-            // Seguridad: ID URL vs ID Body (Aquí comparamos enteros)
+            // Seguridad: ID URL vs ID Body 
             if (id != asesoria.getId()) {
                 Error error = new Error(400, "Bad Request", "El ID de la URL no coincide con el ID del cuerpo");
                 return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
