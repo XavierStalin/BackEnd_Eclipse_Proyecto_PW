@@ -1,5 +1,6 @@
 package ec.edu.ups.ppw.model;
 
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -7,13 +8,13 @@ import ec.edu.ups.ppw.model.enums.Role;
 
 @Entity
 @Table(name = "PW_USUARIOS")
+@JsonbPropertyOrder({"cedula", "nombre", "apellido", "email", "rol", "password", "createdAt", "updatedAt", "detalles"})
 public class Usuario {
 	public Usuario() {
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment en base de datos
-    @Column(name = "usu_id")
-    private int id;
+	@Id
+    @Column(name = "usu_cedula", length = 10) // 10 para incluir el dígito verificador si es necesario
+    private String cedula;
 
     @Column(name = "usu_nombre", length = 100, nullable = false)
     private String nombre;
@@ -38,14 +39,15 @@ public class Usuario {
     private LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    
     private ProgramadorDetalles detalles;
- // --- MÉTODOS DE CICLO DE VIDA (LIFECYCLE CALLBACKS) ---
- // Se ejecuta automáticamente ANTES de insertar en la base de datos
+ // --- METODOS DE CICLO DE VIDA (LIFECYCLE CALLBACKS)
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        // Aseguramos que el rol tenga valor si venía nulo
+        // Si el rol es nulo entonces es usuario normal
         if(this.rol == null) {
             this.rol = Role.USER;
         }
@@ -57,12 +59,12 @@ public class Usuario {
         this.updatedAt = LocalDateTime.now();
     }
 
-	public int getId() {
-		return id;
+	public String getCedula() {
+		return cedula;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
 	}
 
 	public String getNombre() {
@@ -88,7 +90,7 @@ public class Usuario {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	@jakarta.json.bind.annotation.JsonbTransient //evitar enviar la contrasena
 	public String getPassword() {
 		return password;
 	}

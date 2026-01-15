@@ -26,7 +26,7 @@ public class Asesoria {
 
     @Column(name = "ase_fecha_hora_inicio", nullable = false)
     private LocalDateTime fechaHoraInicio;
-    
+    //aqui si imprime todo sin errores, ver porque
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ase_estado")

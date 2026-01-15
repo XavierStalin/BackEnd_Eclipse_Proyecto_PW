@@ -33,7 +33,7 @@ public class DisponibilidadDAO {
 	    }
 
 	    public List<Disponibilidad> getAll() {
-	        String jpql = "SELECT a FROM Asesoria a";
+	        String jpql = "SELECT a FROM Disponibilidad a";
 	        Query q = em.createQuery(jpql, Disponibilidad.class);
 	        return q.getResultList();
 	    }

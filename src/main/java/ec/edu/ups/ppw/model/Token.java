@@ -10,7 +10,7 @@ public class Token {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; // Nota: En el DBML pusiste long, así que aquí usamos long
+    private long id; // usamos long
 
     @Column(unique = true, length = 500)
     private String token;

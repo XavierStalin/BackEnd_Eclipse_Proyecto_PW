@@ -1,5 +1,6 @@
 package ec.edu.ups.ppw.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,6 +17,9 @@ public class Proyecto {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pry_programador_id", nullable = false)
+    @JsonbTransient
+    //AUN EL JSON DEBE MOSTRAR ALGUNA INFORMACION SOBRE 
+    //EL PROGRAMADOR, COMO MINIMO UN ID
     private Usuario programador; // El dueño del portafolio
 
     @Enumerated(EnumType.STRING)
@@ -28,8 +32,16 @@ public class Proyecto {
     @Column(name = "pry_descripcion", columnDefinition = "TEXT")
     private String descripcion;
     
+    //FALTA: tecnologias usadas 
+    
     @Column(name = "pry_url_repositorio", length = 512)
     private String urlRepositorio;
+    
+    //FALTA: url despliegue
+    //FALTA: url imagen preview
+    //FALTA: created at
+    //FALTA: updated at
+    //FALTA: activo??
 
 	public int getId() {
 		return id;

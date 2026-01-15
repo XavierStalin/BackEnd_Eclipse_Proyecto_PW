@@ -1,5 +1,6 @@
 package ec.edu.ups.ppw.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import java.time.LocalTime;
 
@@ -17,6 +18,7 @@ public class Disponibilidad {
     // Relación: Un horario pertenece a un Programador
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dsp_programador_id", nullable = false)
+    @JsonbTransient
     private Usuario programador;
 
     @Column(name = "dsp_dia_semana", length = 20, nullable = false)

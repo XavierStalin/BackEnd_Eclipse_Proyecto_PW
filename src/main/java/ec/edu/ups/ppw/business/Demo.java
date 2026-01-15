@@ -37,46 +37,40 @@ public class Demo {
 	
 	@PostConstruct
 	public void init() {
-		System.out.println(">>> INICIANDO CARGA DE DATOS DE PRUEBA...");
-
-        // ==========================================
-        // 1. CREACIÓN DE USUARIOS (El Programador y el Cliente)
-        // ==========================================
-        
-        // Usuario 1: El Programador (DEV)
+		
+		
+		//USUARIOS 
+        //-------------------------------------
+        //DEV
         Usuario programador = new Usuario();
+        programador.setCedula("1234567891");
         programador.setNombre("Alex");
         programador.setApellido("Velasco");
         programador.setEmail("alex.dev@mail.com");
-        programador.setPassword("admin123"); // En la vida real esto iría encriptado
-        programador.setRol(Role.DEV); // Usamos el Enum
+        programador.setPassword("admin123"); 
+        programador.setRol(Role.DEV);
         daoUsuario.insert(programador);
-        
-        // Usuario 2: El Cliente (USER)
+        //USER
         Usuario cliente = new Usuario();
+        cliente.setCedula("1401041544");
         cliente.setNombre("Maria");
-        cliente.setApellido("Cliente");
+        cliente.setApellido("Ortega");
         cliente.setEmail("maria@cliente.com");
         cliente.setPassword("1234");
         cliente.setRol(Role.USER);
         daoUsuario.insert(cliente);
 
-        System.out.println(">>> Usuarios creados correctamente.");
-
-        // ==========================================
-        // 2. DETALLES DEL PROGRAMADOR (1 a 1)
-        // ==========================================
+        //DETALLES DEL PROGRAMADOR
+        //-------------------------------------
         ProgramadorDetalles detalles = new ProgramadorDetalles();
-        // IMPORTANTE: Aquí vinculamos el detalle al objeto Usuario 'programador'
         detalles.setUsuario(programador); 
         detalles.setEspecialidad("Backend Java & Spring Boot");
         detalles.setBiografia("Estudiante de CS apasionado por Jakarta EE.");
         detalles.setGithubLink("github.com/alexdev");
         daoDetalles.insert(detalles);
 
-        // ==========================================
-        // 3. PROYECTOS (Portafolio)
-        // ==========================================
+        //PROYECTOS (Portafolio)
+        //-------------------------------------
         Proyecto pry = new Proyecto();
         pry.setProgramador(programador); // El dueño del proyecto
         pry.setNombre("Sistema de Portafolio");
@@ -85,47 +79,48 @@ public class Demo {
         pry.setUrlRepositorio("github.com/alexdev/portafolio");
         daoProyecto.insert(pry);
 
-        // ==========================================
-        // 4. DISPONIBILIDAD (Horario)
-        // ==========================================
+        //DISPONIBILIDAD (Horario)
+        //-------------------------------------
         Disponibilidad disp = new Disponibilidad();
         disp.setProgramador(programador);
-        disp.setDiaSemana("MONDAY");
+        disp.setDiaSemana("lunes");
         disp.setHoraInicio(LocalTime.of(14, 0)); // 2:00 PM
-        disp.setHoraFin(LocalTime.of(16, 0));    // 4:00 PM
+        disp.setHoraFin(LocalTime.of(16, 0));// 4:00 PM
         disp.setModalidad(Modality.VIRTUAL);
         daoDisponibilidad.insert(disp);
+        
+        Disponibilidad disp2 = new Disponibilidad();
+        disp2.setProgramador(programador);
+        disp2.setDiaSemana("MARTES");
+        disp2.setHoraInicio(LocalTime.of(15, 0)); // 2:00 PM
+        disp2.setHoraFin(LocalTime.of(17, 0));// 4:00 PM
+        disp2.setModalidad(Modality.PRESENCIAL);
+        daoDisponibilidad.insert(disp2);
 
-        // ==========================================
-        // 5. ASESORÍA (Cita entre Cliente y Programador)
-        // ==========================================
+        //ASESORÍA (Cita entre Cliente y Programador)
+        //-------------------------------------
         Asesoria cita = new Asesoria();
-        cita.setCliente(cliente);        // Quién pide
-        cita.setProgramador(programador);// Quién da la asesoría
-        cita.setFechaHoraInicio(LocalDateTime.now().plusDays(2)); // Cita para dentro de 2 días
+        cita.setCliente(cliente);//Cliente que pide
+        cita.setProgramador(programador);// Dev que da la asesorIa
+        cita.setFechaHoraInicio(LocalDateTime.now().plusDays(2)); // EN 2 DIAS
         cita.setEstado(AdvisoryStatus.PENDIENTE);
         cita.setLinkReunion("zoom.us/j/123456");
         daoAsesoria.insert(cita);
 
-        // ==========================================
-        // 6. NOTIFICACIÓN (Simulacro de Email)
-        // ==========================================
+        //NOTIFICACIÓN (Simulacro de Email)
+        //-------------------------------------
         Notificacion noti = new Notificacion();
         noti.setUsuario(programador); // Avisamos al programador que tiene nueva cita
         noti.setTipo(Notificacion.NotificationType.EMAIL);
         noti.setMensaje("Tienes una nueva solicitud de asesoría de Maria.");
         daoNotificacion.insert(noti);
-        
-        // ==========================================
-        // 7. TOKEN (Simulacro de Login)
-        // ==========================================
-        
-
-        // ==========================================
-        // VERIFICACIÓN EN CONSOLA
-        // ==========================================
         imprimirDatos();
-		
+        Notificacion noti2 = new Notificacion();
+        noti.setUsuario(cliente); // Avisamos al programador que tiene nueva cita
+        noti.setTipo(Notificacion.NotificationType.EMAIL);
+        noti.setMensaje("Tienes una nueva solicitud de asesoría de Alex!!!.");
+        daoNotificacion.insert(noti);
+        imprimirDatos();
 		
 	}
 	private void imprimirDatos() {

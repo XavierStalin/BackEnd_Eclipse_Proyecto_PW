@@ -1,7 +1,7 @@
 package ec.edu.ups.ppw.business;
 
 import java.util.List;
-import ec.edu.ups.ppw.dao.UsuarioDAO; // Asegúrate de usar UsuarioDAO, no PersonaDAO
+import ec.edu.ups.ppw.dao.UsuarioDAO;
 import ec.edu.ups.ppw.model.Usuario;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -10,36 +10,44 @@ import jakarta.inject.Inject;
 public class GestionUsuario {
 
     @Inject
-    private UsuarioDAO daoUsuario; // Usamos el DAO que creamos antes
+    private UsuarioDAO daoUsuario;
 
-    // CREATE
-    public void createUsuario(Usuario usuario) {
-        // Aquí podrías validar cosas (ej: que el email tenga @, que el password sea seguro)
-        daoUsuario.insert(usuario);
-    }
-
-    // READ (Todos)
     public List<Usuario> getUsuarios() {
         return daoUsuario.getAll();
     }
 
-    // READ (Uno)
-    public Usuario getUsuarioPorId(int id) {
-        return daoUsuario.read(id);
-    }
-    
-    // Método extra para el Login (que usamos en el AuthService)
-    public Usuario getUsuarioPorEmail(String email) {
-        return daoUsuario.getUsuarioPorEmail(email);
+    public Usuario getUsuarioPorId(String cedula) throws Exception {
+        if (cedula == null || cedula.length() != 10) {
+            throw new Exception("Formato de cédula incorrecto (Debe tener 10 dígitos)");
+        }
+        return daoUsuario.read(cedula);
     }
 
-    // UPDATE
-    public void updateUsuario(Usuario usuario) {
+    public void createUsuario(Usuario usuario) throws Exception {
+        if (usuario.getCedula().length() != 10) {
+            throw new Exception("Formato de cédula incorrecto");
+        }
+        daoUsuario.insert(usuario);
+    }
+
+    public void updateUsuario(Usuario usuario) throws Exception {
+        // Validaciones igual que en tu referencia
+        if (usuario.getCedula() == null || usuario.getCedula().length() != 10) {
+            throw new Exception("Formato de cédula incorrecto para actualizar");
+        }
+        
+        // Verificamos existencia
+        if (daoUsuario.read(usuario.getCedula()) == null) {
+            throw new Exception("El usuario con cédula " + usuario.getCedula() + " no existe");
+        }
+
         daoUsuario.update(usuario);
     }
-
-    // DELETE
-    public void deleteUsuario(int id) {
-        daoUsuario.delete(id);
+    
+    public void deleteUsuario(String cedula) throws Exception {
+        if (cedula == null || cedula.length() != 10) {
+            throw new Exception("Formato de cédula incorrecto");
+        }
+        daoUsuario.delete(cedula);
     }
 }

@@ -21,11 +21,11 @@ public class UsuarioDAO {
         em.merge(usuario);
     }
 
-    public Usuario read(int id) {
+    public Usuario read(String id) {
         return em.find(Usuario.class, id);
     }
 
-    public void delete(int id) {
+    public void delete(String id) {
         Usuario usuario = em.find(Usuario.class, id);
         if (usuario != null) {
             em.remove(usuario);

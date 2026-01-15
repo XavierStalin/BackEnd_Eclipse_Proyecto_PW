@@ -12,7 +12,43 @@ public class GestionAsesoria {
     @Inject
     private AsesoriaDAO daoAsesoria;
 
-    public List<Asesoria> getAsesoria() {
+    public List<Asesoria> getAsesorias() {
         return daoAsesoria.getAll();
+    }
+
+    public Asesoria getAsesoriaPorId(int id) throws Exception {
+        if (id <= 0) {
+            throw new Exception("El ID debe ser mayor a cero.");
+        }
+        return daoAsesoria.read(id);
+    }
+
+    public void createAsesoria(Asesoria asesoria) throws Exception {
+        // Aquí podrías validar reglas de negocio, por ejemplo:
+        if (asesoria.getCliente() == null || asesoria.getProgramador() == null) {
+            throw new Exception("La asesoría debe tener un cliente y un programador asignados.");
+        }
+        daoAsesoria.insert(asesoria);
+    }
+
+    public void updateAsesoria(Asesoria asesoria) throws Exception {
+        // Validamos que la asesoría traiga un ID válido
+        if (asesoria.getId() == 0) {
+            throw new Exception("Se requiere un ID para actualizar.");
+        }
+        
+        // Verificamos existencia antes de actualizar
+        if (daoAsesoria.read(asesoria.getId()) == null) {
+            throw new Exception("La asesoría con ID " + asesoria.getId() + " no existe.");
+        }
+
+        daoAsesoria.update(asesoria);
+    }
+
+    public void deleteAsesoria(int id) throws Exception {
+        if (id <= 0) {
+            throw new Exception("ID inválido.");
+        }
+        daoAsesoria.delete(id);
     }
 }
