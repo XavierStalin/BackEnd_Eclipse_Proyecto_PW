@@ -105,14 +105,27 @@ public class ProgramadorDetallesService {
         }
 
         try {
-            // TODO: Actualiza aquí los campos específicos de tu modelo ProgramadorDetalles
-            // Ejemplo:
-            // existente.setExperiencia(programadorDetalles.getExperiencia());
-            // existente.setLenguajes(programadorDetalles.getLenguajes());
-            // existente.setGithubUrl(programadorDetalles.getGithubUrl());
+            // --- AQUÍ ESTABA EL ERROR: FALTABA ASIGNAR LOS DATOS NUEVOS ---
             
-            // Nota: No actualices el ID ni la relación con Usuario si no es necesario.
+            // 1. Actualizamos el nombre completo (Requisito de tu profesor)
+            existente.setNombreCompleto(programadorDetalles.getNombreCompleto());
+
+            // 2. Actualizamos el resto de campos
+            existente.setEspecialidad(programadorDetalles.getEspecialidad());
+            existente.setBiografia(programadorDetalles.getBiografia());
+            existente.setTelefono(programadorDetalles.getTelefono());
+            existente.setLinkedinLink(programadorDetalles.getLinkedinLink());
+            existente.setGithubLink(programadorDetalles.getGithubLink());
+            existente.setFotoPerfilUrl(programadorDetalles.getFotoPerfilUrl());
             
+            // 3. Solo actualizamos activo si viene un valor (para evitar nulos accidentales)
+            if (programadorDetalles.getActivo() != null) {
+                existente.setActivo(programadorDetalles.getActivo());
+            }
+
+            // NOTA: Nunca actualizamos el ID ni el Usuario, esos son inmutables aquí.
+            // -------------------------------------------------------------
+
             gpd.updateProgramadorDetalles(existente);
         } catch (Exception e) {
             Error error = new Error(

@@ -107,9 +107,21 @@ public class ProyectoService {
         }
 
         try {
-            // TODO: Aquí debes actualizar los campos de tu Proyecto
-            // Ejemplo: existente.setNombre(proyecto.getNombre());
-            // Ejemplo: existente.setDescripcion(proyecto.getDescripcion());
+            // --- AQUÍ ESTABA EL FALTANTE: Actualizar los campos ---
+            
+            existente.setNombre(proyecto.getNombre());
+            existente.setDescripcion(proyecto.getDescripcion());
+            existente.setCategoria(proyecto.getCategoria());
+            existente.setTecnologiasUsadas(proyecto.getTecnologiasUsadas());
+            
+            existente.setUrlRepositorio(proyecto.getUrlRepositorio());
+            existente.setUrlDespliegue(proyecto.getUrlDespliegue());
+            existente.setUrlImagenPreview(proyecto.getUrlImagenPreview());
+            
+            
+            if (proyecto.getActivo() != null) {
+                existente.setActivo(proyecto.getActivo());
+            }
             
             gp.updateProyecto(existente);
         } catch (Exception e) {

@@ -9,7 +9,10 @@ import ec.edu.ups.ppw.model.enums.ProjectCategory;
 @Entity
 @Table(name = "PW_PROYECTOS")
 public class Proyecto {
-	public Proyecto() {}
+    
+    public Proyecto() {}
+
+    // --- SECCIÓN INTACTA ---
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pry_id")
@@ -21,10 +24,11 @@ public class Proyecto {
     //AUN EL JSON DEBE MOSTRAR ALGUNA INFORMACION SOBRE 
     //EL PROGRAMADOR, COMO MINIMO UN ID
     private Usuario programador; // El dueño del portafolio
+    // -----------------------
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pry_categoria", nullable = false)
-    private ProjectCategory categoria; // 
+    private ProjectCategory categoria;
 
     @Column(name = "pry_nombre", length = 100, nullable = false)
     private String nombre;
@@ -32,64 +36,146 @@ public class Proyecto {
     @Column(name = "pry_descripcion", columnDefinition = "TEXT")
     private String descripcion;
     
-    //FALTA: tecnologias usadas 
+    // Agregado: pry_tecnologias_usadas
+    @Column(name = "pry_tecnologias_usadas", length = 255)
+    private String tecnologiasUsadas;
     
     @Column(name = "pry_url_repositorio", length = 512)
     private String urlRepositorio;
     
-    //FALTA: url despliegue
-    //FALTA: url imagen preview
-    //FALTA: created at
-    //FALTA: updated at
-    //FALTA: activo??
+    // Agregado: pry_url_despliegue
+    @Column(name = "pry_url_despliegue", length = 512)
+    private String urlDespliegue;
 
-	public int getId() {
-		return id;
-	}
+    // Agregado: pry_url_imagen_preview
+    @Column(name = "pry_url_imagen_preview", length = 512)
+    private String urlImagenPreview;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    // Agregado: pry_created_at
+    @Column(name = "pry_created_at")
+    private LocalDateTime createdAt;
 
-	public Usuario getProgramador() {
-		return programador;
-	}
+    // Agregado: pry_updated_at
+    @Column(name = "pry_updated_at")
+    private LocalDateTime updatedAt;
 
-	public void setProgramador(Usuario programador) {
-		this.programador = programador;
-	}
+    // Agregado: pry_activo
+    @Column(name = "pry_activo")
+    private Boolean activo;
 
-	public ProjectCategory getCategoria() {
-		return categoria;
-	}
+    // --- MÉTODOS DE AUDITORÍA (Opcional, pero recomendado para fechas automáticas) ---
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        if(this.activo == null) this.activo = true;
+    }
 
-	public void setCategoria(ProjectCategory categoria) {
-		this.categoria = categoria;
-	}
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    // --- GETTERS Y SETTERS ---
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public Usuario getProgramador() {
+        return programador;
+    }
 
-	public String getUrlRepositorio() {
-		return urlRepositorio;
-	}
-
-	public void setUrlRepositorio(String urlRepositorio) {
-		this.urlRepositorio = urlRepositorio;
-	}
+    public void setProgramador(Usuario programador) {
+        this.programador = programador;
+    }
     
-    
+    // TRUCO: Este getter permite que el JSON muestre el ID aunque el objeto Usuario esté oculto
+    public Integer getProgramadorId() {
+        return programador != null ? programador.getId() : null;
+    }
+
+    public ProjectCategory getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(ProjectCategory categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getTecnologiasUsadas() {
+        return tecnologiasUsadas;
+    }
+
+    public void setTecnologiasUsadas(String tecnologiasUsadas) {
+        this.tecnologiasUsadas = tecnologiasUsadas;
+    }
+
+    public String getUrlRepositorio() {
+        return urlRepositorio;
+    }
+
+    public void setUrlRepositorio(String urlRepositorio) {
+        this.urlRepositorio = urlRepositorio;
+    }
+
+    public String getUrlDespliegue() {
+        return urlDespliegue;
+    }
+
+    public void setUrlDespliegue(String urlDespliegue) {
+        this.urlDespliegue = urlDespliegue;
+    }
+
+    public String getUrlImagenPreview() {
+        return urlImagenPreview;
+    }
+
+    public void setUrlImagenPreview(String urlImagenPreview) {
+        this.urlImagenPreview = urlImagenPreview;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
 }

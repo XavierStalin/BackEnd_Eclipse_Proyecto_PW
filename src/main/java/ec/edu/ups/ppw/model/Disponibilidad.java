@@ -36,6 +36,11 @@ public class Disponibilidad {
 
     public Disponibilidad() {}
 
+ // Permite ver el ID del programador en el JSON aunque el objeto Usuario esté oculto
+    public Integer getProgramadorId() {
+        return programador != null ? programador.getId() : null;
+    }
+    
 	public int getId() {
 		return id;
 	}
