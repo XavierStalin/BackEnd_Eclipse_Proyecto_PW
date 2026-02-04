@@ -45,4 +45,10 @@ public class ProyectoDAO {
         q.setParameter("usuarioId", usuarioId);
         return q.getResultList();
     }
+    public List<Proyecto> findByProgramadorId(int programadorId) {
+        String jpql = "SELECT p FROM Proyecto p WHERE p.programadorId = :programadorId";
+        Query q = em.createQuery(jpql, Proyecto.class);
+        q.setParameter("programadorId", programadorId);
+        return q.getResultList();
+    }
 }

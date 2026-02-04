@@ -62,6 +62,28 @@ public class ProyectoService {
 
         return Response.ok(p).build();
     }
+    
+    
+    @GET
+    @Path("/programador/{programadorId}") // Cambiamos el Path para que sea descriptivo
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProyectosPorProgramador(@PathParam("programadorId") int programadorId) {
+        List<Proyecto> proyectos;
+        try {
+            proyectos = gp.getProyectosPorProgramador(programadorId); 
+        } catch (Exception e) {
+            // ... manejo de error 500 ...
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        if (proyectos == null || proyectos.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("No se encontraron proyectos para el programador: " + programadorId)
+                    .build();
+        }
+
+        return Response.ok(proyectos).build();
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -135,6 +157,36 @@ public class ProyectoService {
         }
 
         return Response.ok(existente).build();
+    }
+    @POST
+    @Path("/programador/{programadorId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createProyectoParaProgramador(@PathParam("programadorId") int programadorId, Proyecto proyecto, @Context UriInfo uriInfo) {
+        try {
+            // 1. Forzamos el ID del programador usando el de la URL
+            proyecto.setProgramadorId(programadorId);
+            
+            // 2. Guardamos usando la lógica de negocio existente
+            gp.createProyecto(proyecto);
+            
+            // 3. Construimos la URL del recurso creado. 
+            // OJO: Queremos que apunte a /api/proyectos/{nuevoId}, no a /programador/...
+            URI location = uriInfo.getBaseUriBuilder() // Obtiene .../api/
+                    .path(ProyectoService.class)       // Agrega "proyectos"
+                    .path(String.valueOf(proyecto.getId())) // Agrega el ID nuevo
+                    .build();
+
+            return Response.created(location)
+                    .entity(proyecto)
+                    .build();
+                    
+        } catch (Exception e) {
+            Error error = new Error(500, "Error al crear proyecto", e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(error)
+                    .build();
+        }
     }
 
     @DELETE

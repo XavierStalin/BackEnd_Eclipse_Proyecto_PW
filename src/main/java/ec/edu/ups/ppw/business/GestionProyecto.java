@@ -39,4 +39,7 @@ public class GestionProyecto {
     public void deleteProyecto(int id) {
         daoProyecto.delete(id);
     }
+    public List<Proyecto> getProyectosPorProgramador(int programadorId) {
+        return daoProyecto.findByProgramadorId(programadorId);
+    }
 }
