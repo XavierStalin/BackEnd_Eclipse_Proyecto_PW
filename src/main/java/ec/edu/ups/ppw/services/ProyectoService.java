@@ -19,6 +19,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
+@PermitAll
 @Path("proyectos") // He cambiado 'proyecto' a plural para seguir el estándar de 'usuarios'
 public class ProyectoService {
 
