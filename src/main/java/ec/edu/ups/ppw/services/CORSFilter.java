@@ -11,21 +11,25 @@ import java.util.List;
 @Provider
 public class CORSFilter implements ContainerResponseFilter {
 
-    // Lista de tus dominios permitidos en Firebase
-    private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
-        "https://portafolio-integrador-2025.web.app",
-        "https://portafolio-integrador-2025.firebaseapp.com",
-        "http://localhost:4200" // Para tus pruebas locales
-    );
-
+    @Override
     public void filter(ContainerRequestContext req, ContainerResponseContext res) {
-    // Para probar, devuelve siempre el origen que llega
-    String origin = req.getHeaderString("Origin");
-    if (origin != null) {
-        res.getHeaders().add("Access-Control-Allow-Origin", origin);
+
+        String origin = req.getHeaderString("Origin");
+
+        if (origin != null) {
+            res.getHeaders().putSingle("Access-Control-Allow-Origin", origin);
+        }
+
+        res.getHeaders().putSingle(
+            "Access-Control-Allow-Headers",
+            "Origin, Content-Type, Accept, Authorization"
+        );
+
+        res.getHeaders().putSingle(
+            "Access-Control-Allow-Methods",
+            "GET, POST, PUT, DELETE, OPTIONS"
+        );
+
+        res.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
     }
-    res.getHeaders().add("Access-Control-Allow-Headers", "*");
-    res.getHeaders().add("Access-Control-Allow-Credentials", "true");
-    res.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-}
 }
