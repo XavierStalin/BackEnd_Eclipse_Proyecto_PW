@@ -9,32 +9,34 @@ FROM quay.io/wildfly/wildfly:27.0.1.Final-jdk17
 
 USER root
 
-# Descargamos el driver de Postgres directamente en la carpeta de despliegues
-# WildFly 27 lo reconocerá automáticamente como un driver llamado "postgresql-jdbc.jar"
+# Descargamos el driver directamente en la carpeta de despliegues
 ADD https://jdbc.postgresql.org/download/postgresql-42.6.0.jar /opt/jboss/wildfly/standalone/deployments/postgresql-jdbc.jar
 
-# CONFIGURACIÓN DEL DATASOURCE (Unificada en un solo comando)
-# Usamos el nombre del archivo .jar como driver-name
-RUN /opt/jboss/wildfly/bin/jboss-cli.sh --command="embed-server, \
-    data-source add --name=PostgresDS \
+# --- CONFIGURACIÓN DEL DATASOURCE ---
+# Creamos un archivo de comandos para evitar errores de sintaxis en el Dockerfile
+RUN echo "embed-server --server-config=standalone.xml" > /tmp/config.cli && \
+    echo "data-source add --name=PostgresDS \
     --jndi-name=java:jboss/datasources/ejPostgresDS \
     --driver-name=postgresql-jdbc.jar \
     --connection-url=jdbc:postgresql://\${env.DB_HOST}:\${env.DB_PORT}/\${env.DB_NAME} \
     --user-name=\${env.DB_USER} \
     --password=\${env.DB_PASSWORD} \
     --check-valid-connection-sql=\"SELECT 1\" \
-    --background-validation=true, \
-    stop-embedded-server"
+    --background-validation=true" >> /tmp/config.cli && \
+    echo "stop-embedded-server" >> /tmp/config.cli
 
-# Copiamos el WAR generado (se renombra a ROOT.war para que sea la app principal)
+# Ejecutamos el script contra el servidor (esto modifica el standalone.xml internamente)
+RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/tmp/config.cli && rm /tmp/config.cli
+
+# --- DESPLIEGUE ---
 COPY --from=build /app/target/*.war /opt/jboss/wildfly/standalone/deployments/ROOT.war
 
-# Permisos correctos para el usuario jboss
+# Ajustar permisos para que WildFly pueda leer su propia configuración en Railway
 RUN chown -R jboss:jboss /opt/jboss/wildfly/standalone/configuration
 
 EXPOSE 8080
 
 USER jboss
 
-# Comando de inicio con resolución de variables activada
+# Arrancar WildFly con resolución de variables activada
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-Djboss.http.port=8080"]
